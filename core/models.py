@@ -11,7 +11,8 @@ class UrlMapping(models.Model):
 
     def generate_short_code(self):
         chars = string.ascii_letters + string.digits
-        return ''.join(random.choice(chars) for _ in range(6))
+        return ''.join(random.choices(chars, k=6))
+
     
     def save(self, *args, **kwargs):
         if not self.short_code:
