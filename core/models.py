@@ -3,9 +3,10 @@ from django.db import models
 import string
 import random
 
+
 class UrlMapping(models.Model):
     original_url = models.TextField()
-    short_code = models.CharField(max_length=7, unique=True, db_index=True)
+    short_code = models.CharField(max_length=6, unique=True, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
     click_count = models.BigIntegerField(default=0)
 

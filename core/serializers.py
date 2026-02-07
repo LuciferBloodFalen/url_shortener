@@ -18,7 +18,7 @@ class UrlMappingSerializer(serializers.ModelSerializer):
 
     def validate_original_url(self, value):
         serializer = serializers.URLField()
-        serializer.run_validation()
+        serializer.run_validation(value)
         return value
     
     def get_short_url(self, obj):
