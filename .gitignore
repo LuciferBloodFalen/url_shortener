@@ -203,3 +203,6 @@ logs/
 *.sqlite
 *.sqlite3
 *.db
+
+# Test Files
+test.http
