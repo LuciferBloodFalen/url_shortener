@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Shortener</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🔗 URL Shortener</h1>
+        <p>Transform your long URLs into short, shareable links</p>
+      </header>
+
+      <main>
+        {% if messages %}
+          <div class="messages">
+            {% for message in messages %}
+              <div class="message message-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if not shortened_url %}
+          <div class="shortener-form">
+            <form method="post">
+              {% csrf_token %}
+              <div class="input-group">
+                {{ form.original_url }}
+                <button type="submit" class="shorten-btn">Shorten URL</button>
+              </div>
+              {% if form.original_url.errors %}
+                <div class="error-message">
+                  {% for error in form.original_url.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </form>
+          </div>
+        {% endif %}
+
+        {% if shortened_url %}
+          <div class="result-section">
+            <div class="result-card">
+              <h3>Your Short URL</h3>
+              <div class="url-display">
+                <input type="text" value="{{ shortened_url.short_url }}" readonly class="short-url-input" />
+                <button class="copy-btn" onclick="copyToClipboard('{{ shortened_url.short_url }}', this)">
+                  <span class="copy-text">Copy</span>
+                  <span class="copy-success" style="display: none;">Copied!</span>
+                </button>
+              </div>
+              <div class="original-url">
+                <strong>Original URL:</strong>
+                <span>{{ shortened_url.original_url }}</span>
+              </div>
+              <a href="{% url 'index' %}" class="new-url-btn">Shorten Another URL</a>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if recent_urls %}
+          <div class="recent-urls">
+            <h3>Recent URLs</h3>
+            <div class="urls-list">
+              {% for url in recent_urls %}
+                <div class="url-item">
+                  <div class="url-info">
+                    <a href="{{ url.short_url }}" class="short-url-link" target="_blank" rel="noopener">{{ url.short_url }}</a>
+                    <div class="original-url-text" title="{{ url.original_url }}">{{ url.original_url }}</div>
+                  </div>
+                  <div class="url-actions">
+                    <button class="copy-small-btn" onclick="copyToClipboard('{{ url.short_url }}', this)">Copy</button>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <form method="post">
+              {% csrf_token %}
+              <button type="submit" name="clear_history" class="clear-btn" onclick="return confirm('Are you sure you want to clear all history?')">Clear History</button>
+            </form>
+          </div>
+        {% endif %}
+      </main>
+
+      <footer>
+        <p>Built with Django</p>
+      </footer>
+    </div>
+
+    <script>
+      function copyToClipboard(text, button) {
+        navigator.clipboard
+          .writeText(text)
+          .then(function () {
+            const copyText = button.querySelector('.copy-text')
+            const copySuccess = button.querySelector('.copy-success')
+      
+            copyText.style.display = 'none'
+            copySuccess.style.display = 'inline'
+      
+            setTimeout(() => {
+              copyText.style.display = 'inline'
+              copySuccess.style.display = 'none'
+            }, 2000)
+          })
+          .catch(function () {
+            const tempInput = document.createElement('input')
+            tempInput.value = text
+            document.body.appendChild(tempInput)
+            tempInput.select()
+            document.execCommand('copy')
+            document.body.removeChild(tempInput)
+      
+            const copyText = button.querySelector('.copy-text')
+            const copySuccess = button.querySelector('.copy-success')
+      
+            copyText.style.display = 'none'
+            copySuccess.style.display = 'inline'
+      
+            setTimeout(() => {
+              copyText.style.display = 'inline'
+              copySuccess.style.display = 'none'
+            }, 2000)
+          })
+      }
+    </script>
+  </body>
+</html>

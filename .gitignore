@@ -187,7 +187,6 @@ Temporary Items
 # Django specific
 media/
 staticfiles/
-static/
 
 # Local development
 .env.local
@@ -204,5 +203,5 @@ logs/
 *.sqlite3
 *.db
 
-# Test Files
-test.http
+# Local test files (uncomment if you don't want to track test files)
+# test.http
