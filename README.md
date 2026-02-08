@@ -18,7 +18,7 @@ A simple and clean URL shortener built with Django. Transform your long URLs int
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/LuciferBloodFalen/url_shortener.git
    cd url_shortener
    ```
 
@@ -30,7 +30,7 @@ A simple and clean URL shortener built with Django. Transform your long URLs int
 
 3. **Install dependencies**
    ```bash
-   pip install django djangorestframework
+   pip install -r requirements.txt
    ```
 
 4. **Run migrations**
